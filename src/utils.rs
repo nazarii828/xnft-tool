@@ -14,7 +14,7 @@ use std::{io, process};
 pub struct Create {}
 
 impl Create {
-    pub fn newRN(name: &String) -> io::Result<()> {
+    pub fn new_rn(name: &String) -> io::Result<()> {
         let cur_dir = env::current_dir();
         println!(
             "\ncreating a new project `{}` in cur_dir -> {:?}\n",
@@ -121,15 +121,89 @@ impl Create {
 
         Ok(())
     }
+
+    pub fn new_native(name: &String) -> io::Result<()> {
+        let cur_dir = env::current_dir();
+        println!(
+            "\ncreating a new project `{}` in cur_dir -> {:?}\n",
+            name,
+            cur_dir.as_ref().unwrap()
+        );
+
+        //check if project already exists
+        if Path::new(name).is_dir() {
+            println!("directory already exists, Run command with new name");
+            process::exit(1);
+        }
+
+        //create project folder
+        new_folder(name)?;
+
+        //package.json
+        create_and_write_file(
+            format!("{}/package.json", name),
+            NativeTemplate::package_json(),
+        )?;
+
+        //gitignore
+        create_and_write_file(format!("{}/.gitignore", name), NativeTemplate::gitignore())?;
+
+        //create the src directory
+        let src_dir_path = format!("{name}/src");
+        new_folder(&src_dir_path)?;
+
+        //index.tsx
+        create_and_write_file(
+            format!("{src_dir_path}/index.tsx"),
+            NativeTemplate::index_tsx(),
+        )?;
+
+        //app.tsx
+        create_and_write_file(format!("{src_dir_path}/App.tsx"), NativeTemplate::app_tsx())?;
+
+        // create the components views, folders and utils folders
+        let components_path = format!("{src_dir_path}/components");
+        let views_path = format!("{src_dir_path}/views");
+        let utils_path = format!("{src_dir_path}/utils");
+        new_folder(&components_path)?;
+        new_folder(&views_path)?;
+        new_folder(&utils_path)?;
+
+        //components
+        create_and_write_file(
+            format!("{components_path}/Header.tsx"),
+            NativeTemplate::header_tsx(),
+        )?;
+        create_and_write_file(
+            format!("{components_path}/Screen.tsx"),
+            NativeTemplate::screen_tsx(),
+        )?;
+        create_and_write_file(
+            format!("{components_path}/TabNavigator.tsx"),
+            NativeTemplate::tab_navigator(),
+        )?;
+
+        //utils
+        create_and_write_file(
+            format!("{utils_path}/icons.tsx"),
+            NativeTemplate::icons_tsx(),
+        )?;
+
+        //views
+        create_and_write_file(
+            format!("{views_path}/About.tsx"),
+            NativeTemplate::about_tsx(),
+        )?;
+
+        create_and_write_file(format!("{views_path}/Home.tsx"), NativeTemplate::home_tsx())?;
+
+        Ok(())
+    }
 }
 
 pub fn new_folder(name: &String) -> std::io::Result<()> {
     fs::create_dir(name)?;
     Ok(())
-}
-
-pub fn black_backpack_image() {
-    //
 }
 
 pub fn create_and_write_file(file_name: String, content_to_write: &str) -> std::io::Result<()> {

@@ -571,7 +571,275 @@ pub struct NativeTemplate {
 }
 
 impl NativeTemplate {
-    //
+    pub fn package_json() -> &'static str {
+        r#"
+		{
+			"name": "xnft-quickstart",
+			"version": "1.0.0",
+			"description": "",
+			"main": "index.js",
+			"scripts": {
+				"build": "xnft build",
+				"start": "xnft native start",
+				"dev": "xnft dev",
+				"clean": "rm -rf node_modules yarn.lock"
+			},
+			"author": "",
+			"license": "ISC",
+			"dependencies": {
+				"react": "^17.0.2",
+				"react-xnft": "latest"
+			},
+			"devDependencies": {
+				"@coral-xyz/xnft-cli": "latest"
+			}
+		}
+		
+		"#
+    }
+
+    pub fn gitignore() -> &'static str {
+        r#"
+		node_modules/
+		.parcel-cache/
+		dist/
+		
+		# debug
+		yarn-debug.log*
+		yarn-error.log*
+		"#
+    }
+
+    pub fn index_tsx() -> &'static str {
+        r#"
+		import React from "react";
+		import ReactXnft, { AnchorDom } from "react-xnft";
+		import App from "./App";
+		
+		ReactXnft.render(
+		  <AnchorDom>
+			<App />
+		  </AnchorDom>
+		);		
+		"#
+    }
+
+    pub fn app_tsx() -> &'static str {
+        r#"
+		import React from "react";
+		import ReactXnft, { View } from "react-xnft";
+		
+		import TabNavigator from "./components/TabNavigator";
+		
+		ReactXnft.events.on("connect", () => {
+			// no-op
+		});
+		
+		function App() {
+		
+			return (
+				<View style={{ height: "100%" }}>
+					<TabNavigator />
+				</View>
+			);
+		}
+		
+		export default App;
+		
+		"#
+    }
+
+    pub fn home_tsx() -> &'static str {
+        r#"
+		import React from "react";
+		import { Text, View } from "react-xnft";
+		
+		import { Screen } from "../components/Screen";
+		import { RedBackpack } from "../utils/icons";
+		import Header from "../components/Header";
+		
+		function Home() {
+		
+			return (
+				<Screen>
+					<Header />
+		
+					<View tw={`flex flex-col justify-center my-auto items-center h-[400px]`}>
+						<View>
+							<RedBackpack width="80" height="55" />
+						</View>
+						<Text tw={`font-black text-xl my-5`}>
+							WAO
+						</Text>
+					</View>
+				</Screen>
+			)
+		}
+		
+		export default Home;
+		"#
+    }
+
+    pub fn about_tsx() -> &'static str {
+        r#"
+		import React from "react";
+		import { Text, View } from "react-xnft";
+		
+		import { Screen } from "../components/Screen";
+		import Header from "../components/Header";
+		
+		function About() {
+			return (
+				<Screen>
+		
+					<Header />
+		
+					<View tw={`flex h-[400px]  text-center flex-col items-center my-auto justify-center`}>
+						<Text tw={`font-black text-2xl`}>
+							Welcome to backpack
+						</Text>
+						<Text tw={`font-bold my-4`}>
+							Minimal xNFT to get you started building.
+						</Text>
+						<Text>
+							X stands for eXecutable—tokenized code representing ownership rights over its execution.
+							The idea is simple, so simple it’s surprising no one has done it yet.
+							But it’s as simple as it is powerful.
+						</Text>
+					</View>
+				</Screen >
+			)
+		}
+		
+		export default About;
+		"#
+    }
+
+    pub fn icons_tsx() -> &'static str {
+        r#"
+		import React from "react";
+		import { Svg, Path } from "react-xnft";
+		
+		export function RedBackpack({ height, width }) {
+			return (
+				<Svg
+					xmlns="http://www.w3.org/2000/svg"
+					width={width}
+					height={height}
+					viewBox="0 0 55 80"
+					fill="none"
+				>
+					<Path
+						fillRule="evenodd"
+						clipRule="evenodd"
+						d="M32.71 6.29026C35.6178 6.29026 38.3452 6.68005 40.8705 7.40296C38.3982 1.64085 33.2649 0 27.5519 0C21.8277 0 16.6855 1.64729 14.2188 7.43692C16.7255 6.68856 19.4412 6.29026 22.339 6.29026H32.71ZM21.6739 12.0752C7.86677 12.0752 0 22.9371 0 36.336V50.1C0 51.4399 1.11929 52.5 2.5 52.5H52.5C53.8807 52.5 55 51.4399 55 50.1V36.336C55 22.9371 45.8521 12.0752 32.0449 12.0752H21.6739ZM27.4805 36.4551C32.313 36.4551 36.2305 32.5376 36.2305 27.7051C36.2305 22.8726 32.313 18.9551 27.4805 18.9551C22.648 18.9551 18.7305 22.8726 18.7305 27.7051C18.7305 32.5376 22.648 36.4551 27.4805 36.4551ZM0 60.5901C0 59.2503 1.11929 58.1641 2.5 58.1641H52.5C53.8807 58.1641 55 59.2503 55 60.5901V75.1466C55 77.8264 52.7614 79.9988 50 79.9988H5C2.23857 79.9988 0 77.8264 0 75.1466V60.5901Z"
+						fill=" #E33E3F"
+					/>
+				</Svg>
+			);
+		}
+		
+		export function HomeIcon({fill}) {
+			return (
+				<Svg xmlns="http://www.w3.org/2000/svg" fill={fill} viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+					<Path fill={fill} stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+				</Svg>
+			)
+		}
+		"#
+    }
+
+    pub fn tab_navigator() -> &'static str {
+        r#"
+		import React from "react";
+		import ReactXnft, { Tab, View } from "react-xnft";
+		
+		import Home from "../Views/Home";
+		import About from "../Views/About";
+		
+		import { HomeIcon, RedBackpack, } from "../utils/icons";
+		
+		function TabNavigator() {
+		
+			return (
+				<View style={{ height: '100vh'}}>
+					<Tab.Navigator
+						style={{
+							borderTop: "none",
+						}}
+						options={({ route }) => {
+							return {
+								tabBarIcon: ({ focused }) => {
+									const color = focused
+										? " #FFFFFF"
+										: " #6B7280";
+									if (route.name === "home") {
+										return (
+											<Tab.Icon element={<HomeIcon fill={color} />} />
+										);
+									} else if (route.name ==="about") {
+										return (
+											<Tab.Icon element={<RedBackpack height="23" width="23" /* fill={color} */ />} />
+										);
+									}
+								},
+							};
+						}}
+					>
+						<Tab.Screen
+							name="home"
+							disableLabel={true}
+							component={() => <Home />}
+						/>
+						<Tab.Screen
+							name="about"
+							disableLabel={true}
+							component={() => <About />}
+						/>
+					</Tab.Navigator>
+				</View>
+			)
+		}
+		
+		export default TabNavigator;
+		"#
+    }
+
+    pub fn screen_tsx() -> &'static str {
+        r#"
+		import React from "react";
+		import { View } from "react-xnft";
+		
+		
+		type Props = {
+			style?: React.CSSProperties
+			children: JSX.Element | JSX.Element[] | null;
+		};
+		
+		export function Screen({ style, children }: Props) {
+			return <View style={{ padding: "10px 20px" }}>{children}</View>;
+		}
+		"#
+    }
+
+    pub fn header_tsx() -> &'static str {
+        r#"
+		import React from "react";
+		import { View } from "react-xnft";
+		import { RedBackpack } from "../utils/icons";
+		
+		function Header() {
+			return (
+				<View tw={`flex justify-center my-1`}>
+					<View> <RedBackpack width="20" height="40" /> </View>
+					<View tw={`font-extrabold text-xl text-white my-auto mx-2`}>Backpack</View>
+				</View>
+			)
+		}
+		
+		export default Header;
+		"#
+    }
 }
 
 // ! don't push this below
