@@ -12,7 +12,7 @@ cargo install create-xnft
 
 2. Download the binary from the releases page.  
 
-### Quickstart
+### Quickstart and usage
 
 To quickly scaffold your app
 
@@ -24,8 +24,6 @@ add the `rn` flag to initialize with react-native
 create-xnft init --rn
 ```
 
-
-### templates
 To use the default [xnft-quickstart](https://github.com/coral-xyz/xnft-quickstart/) template
 ```shell
 create-xnft template --d
