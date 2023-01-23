@@ -638,7 +638,7 @@ impl NativeTemplate {
 		function App() {
 		
 			return (
-				<View style={{ height: "100%" }}>
+				<View style={{ height: "100%", backgroundColor: "rgb(39, 39, 42)"}}>
 					<TabNavigator />
 				</View>
 			);
