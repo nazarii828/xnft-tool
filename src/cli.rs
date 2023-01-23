@@ -1,9 +1,6 @@
-use std::borrow::Borrow;
+use clap::{Parser, Subcommand};
 
-use clap::Arg;
-use clap::{Command, Parser, Subcommand};
-
-use crate::utils::Create;
+use crate::commands::{Create, Template};
 
 #[derive(Parser)]
 #[command(author, version, about, long_about = None)]
@@ -22,7 +19,22 @@ enum Commands {
         /// generate template with react native
         #[arg(long)]
         rn: bool,
-    }, // ! a user should also be able to use new
+    },
+
+    /// Use an xNFT template
+    Template {
+        /// list available templates
+        #[arg(short, long)]
+        list: bool,
+
+        /// use the default xnft-quickstart template
+        #[arg(short, long)]
+        default: bool,
+
+        /// specify a template to use
+        #[arg(short, long)]
+        get: Option<String>,
+    },
 }
 
 pub fn run() {
@@ -40,12 +52,23 @@ pub fn run() {
                 Create::new_rn(&name.to_owned().unwrap()).unwrap();
             } else {
                 // default. generate without react-native
-				if name.is_none() {
+                if name.is_none() {
                     let name = "xnft-project".to_string();
                     Create::new_native(&name).unwrap();
                     return;
                 }
                 Create::new_native(&name.to_owned().unwrap()).unwrap();
+            }
+        }
+        Commands::Template { list, default, get } => {
+            if *list {
+                Template::print_available_templates();
+            };
+            if *default {
+                Template::default_template();
+            };
+            if get.is_some() {
+                Template::get_template(get.to_owned().unwrap().as_str());
             }
         }
         _ => println!("command not recognized"),

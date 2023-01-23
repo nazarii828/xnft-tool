@@ -13,6 +13,11 @@ use std::{io, process};
 //creates the xnft project
 pub struct Create {}
 
+// use the templates
+pub struct Template {
+    //empty
+}
+
 impl Create {
     pub fn new_rn(name: &String) -> io::Result<()> {
         let cur_dir = env::current_dir();
@@ -197,7 +202,42 @@ impl Create {
 
         create_and_write_file(format!("{views_path}/Home.tsx"), NativeTemplate::home_tsx())?;
 
+        // set the current directory
+        env::set_current_dir(name).unwrap();
+
+        //init git
+        let git_result = initialize_git().unwrap();
+        if !git_result.status.success() {
+            eprintln!("Failed to automatically initialize a new git repository");
+        }
+
+        // install node modules
+        let yarn_result = install_node_modules("yarn").unwrap();
+        if !yarn_result.status.success() {
+            println!("Failed yarn install will attempt to npm install");
+            install_node_modules("npm").unwrap();
+        }
+
         Ok(())
+    }
+}
+
+impl Template {
+    pub fn print_available_templates() {
+        println!("\n\t\t\t*** Available Templates ***\n");
+        println!(" * xnft-quickstart");
+    }
+
+    pub fn default_template() {
+        println!("\nCloning into default quickstart repo\n");
+        clone_git_repo("https://github.com/coral-xyz/xnft-quickstart.git").unwrap();
+    }
+
+    pub fn get_template(template_name: &str) {
+        if template_name == "xnft-quickstart" {
+            Self::default_template()
+        }
+        println!("{} not found among the listed templates", template_name);
     }
 }
 
@@ -235,6 +275,16 @@ fn install_node_modules(cmd: &str) -> Result<process::Output, ()> {
 pub fn initialize_git() -> Result<process::Output, ()> {
     Command::new("git")
         .arg("init")
+        .stdout(Stdio::inherit())
+        .stderr(Stdio::inherit())
+        .output()
+        .map_err(|e| println!("error initialize git -> {}", e))
+}
+
+pub fn clone_git_repo(repo_name: &str) -> Result<process::Output, ()> {
+    Command::new("git")
+        .arg("clone")
+        .arg(repo_name)
         .stdout(Stdio::inherit())
         .stderr(Stdio::inherit())
         .output()
