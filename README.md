@@ -2,6 +2,8 @@
 
 A simple CLI tool to help you quickly scaffold an xNFT app.
 
+*demo*: *https://vimeo.com/manage/videos/791916641/privacy*
+
 ### installation
 To install this tool
 
