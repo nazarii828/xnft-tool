@@ -7,7 +7,7 @@ To install this tool
 
 1. use cargo
 ```shell
-cargo install create-xnft
+cargo install --git https://github.com/jim4067/create-xnft/  --locked --force
 ```
 
 2. Download the binary from the releases page.  
