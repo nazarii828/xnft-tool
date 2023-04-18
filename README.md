@@ -1,8 +1,8 @@
-# create-xnft
+# [WIP] create-xnft
 
 A simple CLI tool to help you quickly scaffold an xNFT app.
 
-*demo*: *https://vimeo.com/manage/videos/791916641/privacy*
+*demo*: *https://vimeo.com/manage/videos/791916641/privacy* - OUTDATED
 
 ### installation
 To install this tool
@@ -19,24 +19,10 @@ cargo install --git https://github.com/jim4067/create-xnft/  --locked --force
 To quickly scaffold your app
 
 ```shell 
-create-xnft init 
-```
-add the `rn` flag to initialize with react-native
-```shell
-create-xnft init --rn
+xnft-tool init 
 ```
 
-To use the default [xnft-quickstart](https://github.com/coral-xyz/xnft-quickstart/) template
+To initialize the project using an xnft template, 
 ```shell
-create-xnft template --d
-```
-
-To list the available templates
-```shell
-create-xnft template list
-```
-
-To use a listed templates
-```shell
-create-xnft templates get <template-name>
+xnft-tool init template <github_template_link>
 ```
