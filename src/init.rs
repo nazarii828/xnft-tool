@@ -1,9 +1,10 @@
+// ? Initialize a new xnft project 
 use anyhow::{self, Ok};
 use clap::{Parser, ValueHint};
 use serde_json::{json, Value};
 use std::{
-    fs,
-    io::{stdin, stdout, Read, Write},
+    fs, io,
+    io::{Read, Write},
     path::{Path, PathBuf},
     process::{Command, Stdio},
 };
@@ -252,7 +253,10 @@ pub fn generate_root_files(
     let mut package_json: Value = serde_json::from_str(package_json_str.as_str())?;
     package_json["name"] = json!(project_name);
     let package_json_path = project_dir.join("package.json");
-    fs::write(package_json_path, package_json.to_string())?;
+    let package_json_file = fs::File::create(package_json_path)?;
+
+    let buffered_writer = io::BufWriter::new(package_json_file);
+    serde_json::to_writer_pretty(buffered_writer, &package_json)?;
 
     //app.json
     let mut app_json_file = fs::File::open("./assets/app.json")?;
@@ -261,14 +265,21 @@ pub fn generate_root_files(
     let mut app_json: Value = serde_json::from_str(&app_json_str.as_str())?;
     app_json["expo"]["name"] = json!(project_name);
     app_json["expo"]["slug"] = json!(project_name);
+
     let app_json_path = project_dir.join("app.json");
-    fs::write(app_json_path, app_json.to_string())?;
+    let app_json_file = fs::File::create(app_json_path)?;
+
+    let buffered_writer = io::BufWriter::new(app_json_file);
+    serde_json::to_writer_pretty(buffered_writer, &app_json)?;
 
     //xnft.json
     match yes {
         true => {
             let xnft_json = project_dir.join("xnft.json");
-            fs::write(xnft_json, include_str!("../assets/xnft.json"))?;
+            let xnft_json_file = fs::File::create(xnft_json)?;
+
+            let buffered_writer = io::BufWriter::new(xnft_json_file);
+            serde_json::to_writer_pretty(buffered_writer, include_str!("../assets/xnft.json"))?;
         }
         false => {
             let description = prompt_user(" 📝 describe your app: ")?;
@@ -283,8 +294,12 @@ pub fn generate_root_files(
             xnft_json["name"] = json!(project_name);
             xnft_json["website"] = json!(website);
             xnft_json["contact"] = json!(contact);
+
             let xnft_json_path = project_dir.join("xnft.json");
-            fs::write(xnft_json_path, xnft_json.to_string())?;
+            let xnft_json_file = fs::File::create(xnft_json_path)?;
+
+            let buffered_writer = io::BufWriter::new(xnft_json_file);
+            serde_json::to_writer_pretty(buffered_writer, &xnft_json)?;
         }
     }
 
@@ -294,9 +309,9 @@ pub fn generate_root_files(
 /// prompts for app details
 fn prompt_user(prompt: &str) -> anyhow::Result<String> {
     print!("{prompt}");
-    stdout().flush().unwrap();
+    io::stdout().flush().unwrap();
     let mut output = String::new();
-    stdin().read_line(&mut output)?;
+    io::stdin().read_line(&mut output)?;
 
     Ok(output.trim_end_matches("\n").to_string())
 }
