@@ -6,7 +6,7 @@ mod init;
 mod utils;
 
 use cli::SubCommands;
-use utils::Cmd;// must be in scope to be used 
+use utils::Cmd; // must be in scope to be used
 
 fn main() {
     let opts = Opts::parse();

@@ -1,0 +1,18 @@
+{
+    "kind": "app",
+    "storage": "aws",
+    "name": "xnft-project",
+    "version": "0.0.1",
+    "description": "XNFT PROJECT. WAO",
+    "website": "https://github.com/jim4067/xnft-tool",
+    "contact": "https://github.com/jim4067/xnft-tool",
+    "entrypoints": {
+      "default": {
+        "web": "./web-build/index.html"
+      }
+    },
+    "icon": {
+      "lg": "./assets/icon.png"
+    }
+  }
+  
