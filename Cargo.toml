@@ -1,6 +1,6 @@
 [package]
 name = "xnft-tool"
-version = "0.1.0"
+version = "0.1.1-alpha.1"
 edition = "2021"
 repository = "https://github.com/jim4067/create-xnft/"
 license = "MIT OR Apache-2.0"
