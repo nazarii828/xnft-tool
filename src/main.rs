@@ -1,7 +1,18 @@
+use clap::Parser;
+use cli::Opts;
+
 mod cli;
-mod template;
-mod commands;
+mod init;
+mod utils;
+
+use cli::SubCommands;
+use utils::Cmd; // must be in scope to be used
 
 fn main() {
-    cli::run();
+    let opts = Opts::parse();
+    match opts.sub {
+        SubCommands::Init(cmd) => {
+            cmd.run().unwrap();
+        }
+    }
 }

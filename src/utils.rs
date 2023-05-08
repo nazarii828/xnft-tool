@@ -1,0 +1,6 @@
+use anyhow::Result;
+/// Common trait for all cli commands
+pub trait Cmd: clap::Parser + Sized {
+    type Output;
+    fn run(self) -> Result<Self::Output>;
+}

@@ -1,0 +1,7 @@
+{
+	"expo": {
+		"name": "xnft-tool",
+		"slug": "xnft-tool",
+		"entryPoint": "./src/main"
+	}
+}
